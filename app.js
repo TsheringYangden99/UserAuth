@@ -1,15 +1,20 @@
 const express = require('express');
+const router = express.Router();
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 require('dotenv').config();
-const { createUserTable } = require('./models/userModel');
 
+const { createUserTable } = require('./models/UserModel');
+const { createFoodTable } = require('./models/foodModel');
 
+// Route imports (✅ Declare only once)
+const adminRoutes = require('./routes/adminRoutes');
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes'); // ✅ Fixed from 'userRoute' to 'userRoutes'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 
 // Middlewares
 app.use(express.urlencoded({ extended: false }));
@@ -22,26 +27,20 @@ app.use(session({
   saveUninitialized: true,
 }));
 
-
 // View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-
 // Routes
-// const adminRoutes = require('./routes/adminRoutes');
-const authRoutes = require('./routes/authRoutes');
-// const userRoutes = require('./routes/userRoutes');
 app.use('/', authRoutes);
-// app.use('/', adminRoutes);
-// app.use('/', userRoutes);
-
+app.use('/admin', adminRoutes);
+app.use('/user', userRoutes);
 
 // Schema creation
-createUserTable(); // Call this after setting up middlewares
+createUserTable();
+createFoodTable();
 
-
-// Server
+// Start server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
