@@ -5,8 +5,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 require('dotenv').config();
 
-const { createUserTable } = require('./models/UserModel');
-const { createFoodTable } = require('./models/foodModel');
+const { createUserTable } = require('./Models/UserModel');
+const { createFoodTable } = require('./Models/foodModel');
 
 // Route imports (✅ Declare only once)
 const adminRoutes = require('./routes/adminRoutes');
